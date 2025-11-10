@@ -1,0 +1,120 @@
+
+.posts-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: baseline;
+}
+
+#posts-title {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    font-size: 24px;
+}
+
+#post-write {
+    margin-top: 24px;
+    display: flex;
+    justify-content: end;
+}
+
+#post-write-btn {
+    width: 140px;
+    height: 40px;
+    margin-right: 10px;
+    background-color: var(--invalid-btn-bg);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    transition: background-color 150ms ease;
+}
+
+#post-write-btn:hover {
+    background-color: #7F6AEE;
+}
+
+
+#posts-view {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    width: 592px;
+    gap: 16px;
+
+}
+
+
+
+.post-card {
+    display: flex;
+    flex-direction: column;
+    height: 169px;
+    background-color: #FFFFFF;
+    box-shadow: 3px 4px 4px 0 rgba(204, 204, 204, 0.25);
+    border-radius: 16px;
+    transition: background-color 150ms ease;
+}
+
+.post-meta-area {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--sub-bg);
+    padding-left: 23px;
+    padding-right: 23px;
+}
+
+.post-card-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.post-card-meta-field {
+    display: flex;
+    justify-content: space-between;
+    height: 14px;
+    padding-bottom: 40px;
+}
+
+
+.post-card-count-field {
+    gap: 13px;
+    font-size: 14px;
+}
+
+.post-card-date-field {
+    font-size: 14px;
+}
+
+
+.author-meta-area {
+    display: flex;
+    align-items: center;
+    padding-left: 23px;
+    gap: 10px;
+    flex:1;
+    
+}
+
+.author-profile-image {
+    height: 36px;
+    width: 36px;
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 영역에 맞게 꽉 채움 */
+    display: block;
+    background-color: var(--sub-bg);
+}
+
+.authorNickname {
+    font-weight: bold;
+    font-size: 15px;
+}

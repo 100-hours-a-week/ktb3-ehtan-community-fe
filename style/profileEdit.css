@@ -1,0 +1,130 @@
+.profileedit-page {
+    flex-direction: column;
+    justify-content: start;
+}
+
+form {
+    margin-top: 161px;
+    width: 355px;
+}
+
+.profile-edit-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.form-field {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.progile-edit-image-field {
+    margin-bottom: 22px;
+}
+.progile-edit-email-field {
+    margin-bottom: 12px;
+}
+
+#email-view {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+#inputNickname{
+    margin-top: 3px;
+    height: 32px;
+    width: 355px;
+    padding: 0px 7px;
+    font-size: 14px
+}
+
+#hintNickname {
+    margin-top: 3px;
+}
+
+
+
+.profile-edit-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
+
+.field__file__input {
+    display: none;
+    
+}
+
+.upload-circle {
+    width: 149px;
+    height: 149px;
+    border-radius: 50%;
+    background: #C4C4C4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.upload-circle .plus-icon {
+    height: 24px;
+    width: 24px;
+}
+
+.upload-circle:hover {
+    background: #c8c8c8;
+}
+
+.upload-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.profile-edit-button {
+    width: 355px;
+    height: 35px;
+    margin-top: 10px;
+    border:none;
+    border-radius: var(--radius);
+    background-color: var(--invalid-btn-bg);
+    color: white;
+    font-size: 15px;
+    transition: background-color 150ms ease, transform 200ms ease;
+}
+
+.profile-edit-button-disabled {
+    background-color: var(--sub-bg);
+    cursor: not-allowed;
+}
+
+.profile-edit-button-enabled {
+    background-color: var(--valid-btn-bg);
+    cursor: pointer;
+}
+
+.withdraw-button {
+    margin-top: 10px;
+    background-color: inherit;
+    border:none;
+    font-size: 14px;
+}
+
+.profile-edit-success-toast-msg {
+    margin-top: 90px;
+    width: 102px;
+    height: 46px;
+    border-radius: 30px;
+    background-color: var(--invalid-btn-bg);
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 18px;
+    line-height: 46px;
+    opacity: 0;
+}

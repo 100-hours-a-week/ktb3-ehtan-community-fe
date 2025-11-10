@@ -1,0 +1,267 @@
+
+.post-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#post-summary {
+    margin-top: 24px;
+    height: 103px;
+    width: 592px;
+    font-size: 24px;
+
+    padding-left: 25px;
+
+    border-bottom: 1px solid var(--sub-bg);
+}
+
+.post-card-date-field {
+    margin-left: 25px;
+    font-size: 14px;
+}
+
+
+.author-meta-area {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    
+}
+
+.author-profile-image {
+    height: 36px;
+    width: 36px;
+}
+
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 영역에 맞게 꽉 채움 */
+    display: block;
+    background-color: var(--sub-bg);
+}
+
+.authorNickname {
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#author-area {
+    display: flex;
+    margin-left: 214px;
+    align-items: center;
+    gap: 10px;
+}
+#author-area button {
+    height: 27px;
+    width: 50px;
+    border: 1px solid var(--invalid-btn-bg);
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+#post-content-wrapper {
+    margin-top: 20px;
+
+    font-size: 14px;
+}
+
+.post-content-img {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    width: 544px;
+    height: 306px;
+    background-color: var(--sub-bg);
+}
+.post-content {
+    white-space: pre-wrap;
+}
+
+.post-count-area {
+    margin-top: 20px;
+    padding-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.post-count-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 77px;
+    width: 116px;
+    background-color: var(--sub-bg);
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.post-like-box {
+    cursor: pointer;
+    transition: background-color 150ms ease;
+}
+
+.post-like-box-active {
+    background-color: var(--invalid-btn-bg);
+}
+
+.post-like-count {
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+#comment-write {
+    width: 595px;
+    border-top: 1px solid var(--sub-bg);
+    margin-bottom: 21px;
+}
+
+#comment-write form {
+    background-color: #FFFFFF;
+    margin-top: 30px;
+    border-radius: 10px;
+}
+
+
+#comment-write div:first-child {
+    padding: 20px 20px 0px 20px;
+    border-bottom: 1px solid var(--sub-bg);
+}
+#inputComment {
+    border: none;
+    font-size: 14px;
+    width: 544px;
+    height: 94px;
+    padding-top: 10px;
+
+    resize: none;
+}
+
+
+#comment-write div:last-child {
+    display: flex;
+    justify-content: end;
+    padding: 10px;
+}
+
+
+.comment-submit-btn {
+    height: 39px;
+    width: 138px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: var(--invalid-btn-bg);
+    border: none;
+    border-radius: 15px;
+    transition: background-color 150ms ease;
+    cursor: not-allowed;
+}
+
+.comment-submit-btn.comment-submit-enabled {
+    background-color: var(--valid-btn-bg);
+    cursor: pointer;
+}
+
+.comment-submit-btn.comment-submit-disabled {
+    background-color: var(--invalid-btn-bg);
+    cursor: not-allowed;
+}
+
+.comment-wrapper{
+    display: flex;
+    width: 544px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.comment-meta-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 370px;
+}
+.comment-content {
+    padding-left: 46px;
+    padding-top: 10px;
+    font-size: 15px;
+}
+
+.comment-write-area {
+    display: flex;
+    gap: 10px;
+}
+
+.comment-write-area button{
+    height: 25px;
+    width: 45px;
+    font-size: 14px;
+    border: 1px solid var(--invalid-btn-bg);
+    border-radius: 5px;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-dialog {
+    width: 408px;
+    height: 242px;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.modal-description {
+    font-size: 16px;
+    color: #333333;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+}
+
+.modal-btn {
+    width: 140px;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.modal-btn-cancel {
+    background-color: #1F1F1F;
+}
+
+.modal-btn-confirm {
+    background-color: var(--invalid-btn-bg);
+}
+
+body.modal-open {
+    overflow: hidden;
+}

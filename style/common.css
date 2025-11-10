@@ -1,0 +1,161 @@
+/* 
+=======================================================
+전역 스타일
+=======================================================
+*/
+:root{
+    --bg: #f4f6f9;
+    --text: #000000;
+
+    --invalid-btn-bg: #ACA0EB;
+    --valid-btn-bg: #7F6AEE;
+    --collect-bg: #7F6AEE;
+
+    --sub-bg: #D9D9D9;
+
+    --radius: 5px;
+}
+
+*{ box-sizing: border-box; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin:0;
+    color: var(--text);
+    background: var(--bg);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+main {
+    width: 600px;
+    height: 100%;
+}
+
+
+.page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 
+=======================================================
+공통 유틸 스타일
+=======================================================
+*/
+.hidden {
+    visibility: hidden !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.field__hint {
+    color: #FF3333;
+    padding-left: 2px;
+    font-size: 13px;
+    height: 15px;
+}
+/* 
+=======================================================
+사이트 상단 헤더
+=======================================================
+*/
+
+.header-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 103px;
+    flex: 0 0 103px;
+
+    border-bottom: 1px solid black;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 600px;;
+}
+
+.header-title {
+    height: 32px;
+    width: 100%;
+
+    line-height: 100%;
+    font-size: 32px;
+    text-align: center;
+}
+
+.header-action {
+    height: 36px;
+    width: 36px;
+    flex: 0 0 36px;
+}
+
+.header-action-left {
+    position: relative;
+    left: 29px;
+}
+
+.header-action-right {
+    position: relative;
+    right: 29px;
+}
+
+.profile-image-wrapper {
+    border-radius: 50%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    background-color: var(--sub-bg);
+}
+
+#profileImage,
+.myProfileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 영역에 맞게 꽉 채움 */
+    display: block;    /* 여백 제거 */
+    background-color: var(--sub-bg);
+}
+
+.profile-menu {
+    position: absolute;
+    width: 115px;
+    height: 105px;
+    background: #E9E9E9;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    padding: 8px 0;
+}
+
+.profile-menu button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.profile-menu button:hover {
+    font-weight: 600;
+}
