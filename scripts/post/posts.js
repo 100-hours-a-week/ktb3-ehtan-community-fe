@@ -10,6 +10,95 @@ document.addEventListener('DOMContentLoaded', async () => {
     
 });
 
+function createFixedMasonry(container, { columnWidth, gutter }) {
+    const state = {
+        items: [],
+        columns: [],
+        columnHeights: [],
+        columnCount: 0,
+        cardWidth: columnWidth,
+    };
+
+    const applyContainerStyle = () => {
+        container.style.display = "flex";
+        container.style.gap = `${gutter}px`;
+        container.style.alignItems = "flex-start";
+    };
+
+    const computeLayoutMeta = () => {
+        const containerWidth = container.clientWidth || columnWidth;
+        const cardWidth = Math.min(columnWidth, containerWidth);
+        const count = Math.max(1, Math.floor((containerWidth + gutter) / (cardWidth + gutter)));
+        return { count, cardWidth };
+    };
+
+    const rebuildColumns = (count) => {
+        const fragment = document.createDocumentFragment();
+        const newColumns = [];
+        for (let i = 0; i < count; i++) {
+            const col = document.createElement("div");
+            col.className = "posts-column";
+            newColumns.push(col);
+            fragment.appendChild(col);
+        }
+        container.innerHTML = "";
+        container.appendChild(fragment);
+        state.columns = newColumns;
+        state.columnHeights = Array(count).fill(0);
+        state.columnCount = count;
+    };
+
+    const ensureColumns = (count) => {
+        if (state.columnCount !== count || state.columns.length !== count) {
+            rebuildColumns(count);
+            return;
+        }
+        state.columnHeights = Array(count).fill(0);
+        state.columns.forEach(col => col.textContent = "");
+    };
+
+    const positionItem = (el) => {
+        if (state.columnHeights.length === 0) ensureColumns(1);
+        const minHeight = Math.min(...state.columnHeights);
+        const colIndex = state.columnHeights.indexOf(minHeight);
+        const targetCol = state.columns[colIndex];
+        el.style.width = `${state.cardWidth}px`;
+        targetCol.appendChild(el);
+        state.columnHeights[colIndex] = minHeight + el.offsetHeight + gutter;
+    };
+
+    const layout = () => {
+        applyContainerStyle();
+        const { count, cardWidth } = computeLayoutMeta();
+        state.cardWidth = cardWidth;
+
+        ensureColumns(count);
+        state.items.forEach(positionItem);
+    };
+
+    const append = (newItems) => {
+        if (!newItems || newItems.length === 0) return;
+        newItems.forEach(el => state.items.push(el));
+        requestAnimationFrame(layout);
+    };
+
+    const handleResize = () => layout();
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
+    window.addEventListener("resize", handleResize);
+
+    const destroy = () => {
+        resizeObserver.disconnect();
+        window.removeEventListener("resize", handleResize);
+        state.items = [];
+        state.columnHeights = [];
+        state.columns = [];
+    };
+
+    return { append, layout, destroy };
+}
+
 
 async function initPostsPage() {
     myProfileHandler();
@@ -46,24 +135,18 @@ function canScroll(rootEl) {
     return rootEl.scrollHeight > rootEl.clientHeight + 50; // 여유 50px
 }
 
-async function fillUntilScrollable(ctx, msnry) {
+async function fillUntilScrollable(ctx, layout) {
     const root = ctx.$scrollRoot || document.documentElement;
 
     while (!canScroll(root) && ctx.cursor != null) {
-        await loadMorePosts(ctx, msnry);
+        await loadMorePosts(ctx, layout);
     }
 }
 
 
 async function loadPostHandler() {
     const grid = document.getElementById("posts-view");
-    const msnry = new Masonry(grid, {
-        itemSelector: '.post-card',
-        columnWidth: '.grid-sizer',
-        percentPosition: true,
-        gutter: 16,
-        transitionDuration: '0.25s',
-    });
+    const layout = createFixedMasonry(grid, { columnWidth: 330, gutter: 10 });
 
     const ctx = {
         $list: grid,
@@ -77,7 +160,7 @@ async function loadPostHandler() {
 
     ctx.observer = new IntersectionObserver((entries) => {
         if (entries.some(e => e.isIntersecting)) {
-            loadMorePosts(ctx, msnry);
+            loadMorePosts(ctx, layout);
         }
     }, {
         rootMargin: "300px 0px",
@@ -86,12 +169,12 @@ async function loadPostHandler() {
 
     ctx.observer.observe(ctx.$sentinel);
 
-    await loadMorePosts(ctx, msnry);
-    await fillUntilScrollable(ctx, msnry);
+    await loadMorePosts(ctx, layout);
+    await fillUntilScrollable(ctx, layout);
 }
 
 
-async function loadMorePosts(ctx, msnry) {
+async function loadMorePosts(ctx, layout) {
     if (ctx.loading) return;
     ctx.loading = true;
 
@@ -117,13 +200,11 @@ async function loadMorePosts(ctx, msnry) {
                 window.location.href = `/page/post.html?postId=${post.id}`;
             });
 
-            grid.appendChild(card);
             newItems.push(card);
         });
 
         if (newItems.length > 0) {
-            msnry.appended(newItems);
-            msnry.layout();
+            layout.append(newItems);
         }
 
         const prevCursor = ctx.cursor;
