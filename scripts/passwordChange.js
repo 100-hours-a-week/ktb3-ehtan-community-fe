@@ -1,16 +1,8 @@
-import { isLoggedIn } from "./auth.js";
 import { __patchFetch } from "./api.js";
 import { __validateInputPassword, msg } from "./validation.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (!isLoggedIn()) {
-        window.location.replace("/page/login.html");
-        return;
-    }
-    initPasswordChangePage();
-});
 
-function initPasswordChangePage() {
+export function initPasswordChangePage() {
     const passwordInput = document.getElementById("inputPassword");
     const passwordCheckInput = document.getElementById("inputPasswordCheck");
     const hintPassword = document.getElementById("hintPassword");

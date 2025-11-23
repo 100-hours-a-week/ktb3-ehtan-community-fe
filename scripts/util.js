@@ -24,8 +24,13 @@ export function findDom(selector) {
     return el;
 }
 
-// export function findDom($parentEl, selector) {
-//     const el = $parentEl.querySelector(selector);
-//     if (!el) throw new Error(`Element not found: ${selector}`);
-//     return el;
-// }
+export function findDomOrNull(selector) {
+    return document.querySelector(selector);
+}
+
+export function getParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has(param)) 
+        return params.get(param);
+    return null;
+}

@@ -1,10 +1,11 @@
-import { isLoggedIn } from "./auth.js";
-import { __getFetch, __patchFetch, __postFetch } from "./api.js";
+import { __getFetch, __patchFetch, __postFetch, __uploadFile } from "./api.js";
 import { __validatePostTitle } from "./validation.js";
 
 const state = {
     postId: null,
     mode: "create",
+    thumbnailImageUrl: null,
+    uploadingImage: false,
 };
 
 const els = {
@@ -13,48 +14,37 @@ const els = {
     image: null,
     submit: null,
     hintTitle: null,
+    hintImage: null,
     header: null,
     form: null,
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-    if (!isLoggedIn()) {
-        window.location.replace("/page/login.html");
-        return;
-    }
 
-    cacheElements();
-    initFormHandlers();
 
-    state.postId = new URLSearchParams(window.location.search).get("postId");
-    state.mode = state.postId ? "edit" : "create";
-    applyModeToUI();
-
-    if (state.mode === "edit") {
-        await hydratePostForEdit();
-    }
-
-    updateSubmitState();
-});
-
-function cacheElements() {
+export function cacheElements() {
     els.title = document.getElementById("inputPostEditTitle");
     els.content = document.getElementById("inputPostEditContent");
     els.image = document.getElementById("inputPostEditImage");
     els.submit = document.getElementById("inputPostEditSubmit");
     els.hintTitle = document.getElementById("hintTitle");
+    els.hintImage = document.getElementById("hintImage");
     els.header = document.getElementById("post-edit");
     els.form = document.getElementById("post-edit-form");
 }
 
-function initFormHandlers() {
+export function getState() {
+    return state;
+}
+
+export function initFormHandlers() {
     if (!els.form) return;
     els.title?.addEventListener("input", () => updateSubmitState());
     els.content?.addEventListener("input", () => updateSubmitState());
+    els.image?.addEventListener("change", handleImageInputChange);
     els.form.addEventListener("submit", handleSubmit);
 }
 
-function applyModeToUI() {
+export function applyModeToUI() {
     if (!els.header || !els.submit) return;
     if (state.mode === "edit") {
         els.header.textContent = "게시글 수정";
@@ -65,7 +55,7 @@ function applyModeToUI() {
     }
 }
 
-async function hydratePostForEdit() {
+export async function hydratePostForEdit() {
     if (!state.postId) return;
     const res = await __getFetch(`/posts/${state.postId}`);
     if (!res?.ok) return;
@@ -74,11 +64,17 @@ async function hydratePostForEdit() {
 
     els.title.value = json.data.title ?? "";
     els.content.value = json.data.content ?? "";
+    state.thumbnailImageUrl = extractImageUrl(json.data);
+    if (state.thumbnailImageUrl) {
+        setImageHint("기존 이미지를 유지합니다.");
+    } else {
+        setImageHint("");
+    }
 
     updateSubmitState();
 }
 
-function updateSubmitState() {
+export function updateSubmitState() {
     if (!els.submit || !els.title || !els.content) return;
     const titleValue = els.title.value ?? "";
     const contentValue = (els.content.value ?? "").trim();
@@ -94,9 +90,10 @@ function updateSubmitState() {
 
     const isValid = titleValidation.ok && !!contentValue;
 
-    els.submit.disabled = !isValid;
-    els.submit.classList.toggle("post-edit-submit-enabled", isValid);
-    els.submit.classList.toggle("post-edit-submit-disabled", !isValid);
+    const canSubmit = isValid && !state.uploadingImage;
+    els.submit.disabled = !canSubmit;
+    els.submit.classList.toggle("post-edit-submit-enabled", canSubmit);
+    els.submit.classList.toggle("post-edit-submit-disabled", !canSubmit);
 }
 
 function setTitleHint(message) {
@@ -104,9 +101,15 @@ function setTitleHint(message) {
     els.hintTitle.textContent = message ?? "";
 }
 
+function setImageHint(message) {
+    if (!els.hintImage) return;
+    els.hintImage.textContent = message ?? "";
+}
+
 async function handleSubmit(event) {
     event.preventDefault();
     if (!els.title || !els.content || !els.submit) return;
+    if (state.uploadingImage) return;
 
     const title = els.title.value.trim();
     const content = els.content.value.trim();
@@ -116,7 +119,12 @@ async function handleSubmit(event) {
         return;
     }
 
-    const payload = { title, content };
+    const payload = {
+        title,
+        content,
+        thumbnail_image_url: state.thumbnailImageUrl ?? null,
+    };
+    console.log(payload.thumbnail_image_url);
     els.submit.disabled = true;
 
     try {
@@ -137,4 +145,64 @@ async function handleSubmit(event) {
         els.submit.disabled = false;
         updateSubmitState();
     }
+}
+
+async function handleImageInputChange(event) {
+    const file = event.target?.files?.[0];
+    if (!file) {
+        if (!state.thumbnailImageUrl) {
+            setImageHint("");
+        }
+        updateSubmitState();
+        return;
+    }
+
+    const previousUrl = state.thumbnailImageUrl;
+    state.uploadingImage = true;
+    setImageHint("이미지를 업로드 중입니다...");
+    updateSubmitState();
+
+    try {
+        const res = await __uploadFile("/upload/post", file, "image");
+        if (!res?.ok) throw new Error("이미지 업로드 실패");
+        const json = await res.json().catch(() => null);
+        const uploadedUrl = extractImageUrl(json?.data);
+        if (!uploadedUrl) throw new Error("업로드 결과에 이미지 경로가 없습니다.");
+        state.thumbnailImageUrl = uploadedUrl;
+        setImageHint("이미지가 업로드되었습니다.");
+    } catch (error) {
+        console.error(error);
+        state.thumbnailImageUrl = previousUrl ?? null;
+        setImageHint("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+        if (els.image) {
+            els.image.value = "";
+        }
+    } finally {
+        state.uploadingImage = false;
+        updateSubmitState();
+    }
+}
+
+function extractImageUrl(data) {
+    if (!data || typeof data !== "object") return null;
+    const candidates = [
+        "thumbnailImageUrl",
+        "thumbnail_image_url",
+        "thumbnailImage",
+        "thumbnail_image",
+        "imageUrl",
+        "image_url",
+        "image",
+        "profileImage",
+        "profile_image",
+        "url",
+    ];
+
+    for (const key of candidates) {
+        const value = data[key];
+        if (typeof value === "string" && value.trim()) {
+            return value;
+        }
+    }
+    return null;
 }

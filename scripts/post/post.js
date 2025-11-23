@@ -1,9 +1,10 @@
 
 import { __getFetch, __postFetch, __patchFetch, __deleteFetch } from "../api.js";
-import { isLoggedIn } from "../auth.js";
-import { formatDateForCard, setTextContent, formatCountForCard } from '../util.js';
+import { formatDateForCard, setTextContent, formatCountForCard, getParam } from '../util.js';
 
-const SUBMIT_LABEL_DEFAULT = "댓글 입력";
+
+
+const SUBMIT_LABEL_DEFAULT = "댓글 입력"; 
 const SUBMIT_LABEL_EDIT = "댓글 수정";
 
 const state = {
@@ -26,23 +27,10 @@ const postDeleteModal = {
     confirmBtn: null,
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-    state.postId = resolvePostId();
-    if (!state.postId) {
-        window.location.replace("/index.html");
-    }
-    await initPostPage();
-});
 
-function resolvePostId() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("postId")) 
-        return params.get("postId");
-    return null;
-}
-
-async function initPostPage() {
-    myProfileHandler();
+export async function initPostPage(postId) {
+    
+    state.postId = postId;
     initLikeHandler();
     initPostEditButton();
     initCommentForm();
@@ -51,15 +39,6 @@ async function initPostPage() {
         loadPostDetail(state.postId),
         loadCommentHandler(state.postId),
     ]);
-}
-
-function myProfileHandler() {
-    const $myProfileImage = document.getElementById('myProfileImage');
-    const url = localStorage.getItem('profile_image_url');
-
-    if (url && url.trim() !== "" && url !== "dummy link") {
-        $myProfileImage.src = url;
-    }
 }
 
 function initCommentForm() {

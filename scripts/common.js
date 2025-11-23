@@ -1,21 +1,46 @@
-import { findDom } from "./util.js";
+import { findDom, findDomOrNull } from "./util.js";
 import { logOut, isLoggedIn } from "./auth.js";
+import { initSideProfileCard } from './sidebar.js'
+import { __postFetch } from "./api.js";
+import { __validateInputPassword, __validateInputEmail, msg } from "./validation.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-    initHeader();
-});
 
-function initHeader() {
-    const $header = findDom('.header-wrapper');
-    const $profileWrapper = findDom('.header-right');
+export function initCommonLayout() {
 
-    if ($profileWrapper && isLoggedIn()) {
+    const authed = isLoggedIn();
+
+    initHeader(authed);
+    initSideProfileCard(authed);
+    reRender(authed);
+    initAuthRequiredHandler();
+}
+
+
+function initHeader(authed) {
+    initSidebarToggle();
+
+    const $profileWrapper = findDomOrNull('.header-right');
+    if (authed && $profileWrapper && isLoggedIn()) {
         initProfileDropdown($profileWrapper);
+        initHeaderProfile();
     } else {
         $profileWrapper.classList.add('hide');
     }
-    initSidebarToggle();
-    initHeaderScrollBehavior($header);
+
+    const $header = findDom('.header-wrapper');
+    handlerHeaderScrollBehavior($header);
+}
+
+function initHeaderProfile() {
+    const $profileImage = findDomOrNull('#open-profile-settings');
+    const url = localStorage.getItem('profile_image_url');
+    if ($profileImage) {
+        if (url && url.trim() !== "" && url !== "dummy link") {
+            $profileImage.src = url;
+        } else {
+            $profileImage.src = "/images/profile_placeholder.svg";
+        }
+    }
 }
 
 function initProfileDropdown($wrapper) {
@@ -47,16 +72,25 @@ function initProfileDropdown($wrapper) {
     });
 }
 
+
 function initSidebarToggle() {
     const $toggle = findDom('#sidebar-toggle');
     const $toggleIcon = findDom('#sidebar-toggle svg');
-    const $side = findDom(".side");
-    const $page = findDom(".posts-page");
+    const $side = findDomOrNull('.side');
+    const $page = findDomOrNull('.page');
+
+    if (!$side) {
+        // 만약 사이드가 없다면 사이드 버튼은 숨김고 이벤드 등록 종료
+        $toggle.classList.add('hide');
+        return;
+    }
 
     const setCollapsed = (collapsed) => {
         $toggleIcon.classList.toggle('icon-select', !collapsed)
         $side.classList.toggle("collapsed", collapsed);
-        $page.classList.toggle("side-collapsed", collapsed);
+        if ($page) {
+            $page.classList.toggle("side-collapsed", collapsed);
+        }
     };
 
     $toggle.addEventListener("click", () => {
@@ -65,7 +99,8 @@ function initSidebarToggle() {
     });
 }
 
-function initHeaderScrollBehavior($header) {
+
+function handlerHeaderScrollBehavior($header) {
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -91,4 +126,30 @@ function initHeaderScrollBehavior($header) {
         ticking = true;
         }
     }, { passive: true });
+}
+
+
+function reRender(authed) {
+    updateDataAuthOnly(authed);
+}
+
+
+function updateDataAuthOnly(authed) {
+    document.querySelectorAll("[data-auth-only]").forEach(el => {
+        el.classList.toggle("hide", !authed);
+    });
+    document.querySelectorAll("[data-auth-guest]").forEach(el => {
+        el.classList.toggle("hide", authed);
+    });
+}
+
+function initAuthRequiredHandler() {
+    document.addEventListener("click", (e) => {
+        const target = e.target.closest("[data-auth-only]");
+        if (!target) return;
+        if (isLoggedIn()) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openGlobalLoginModal();
+    });
 }

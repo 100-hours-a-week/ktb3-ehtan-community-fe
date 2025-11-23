@@ -1,14 +1,23 @@
 export async function __fetch(_path, _method, _body, _contentType = "application/json") {
     const accessToken = localStorage.getItem("access_token");
     const userIdToken = localStorage.getItem("user_id");
+    const headers = {
+        // ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
+        ...(userIdToken ? { "access_token": userIdToken } : {}),
+    };
+
+    let body;
+    if (_body instanceof FormData) {
+        body = _body;
+    } else if (_body !== undefined && _body !== null) {
+        headers["Content-Type"] = _contentType;
+        body = typeof _body === "string" ? _body : JSON.stringify(_body);
+    }
+
     return await fetch("http://localhost:8080" + _path, {
         method: _method,
-        headers: {
-            "Content-Type": _contentType,
-            // ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
-            ...(userIdToken ? { "access_token": userIdToken } : {})
-        },
-        body: JSON.stringify(_body)
+        headers,
+        body,
     });
 }
 
@@ -47,9 +56,9 @@ export async function __deleteFetch(_path, _body) {
     return await __fetch(_path, "DELETE", _body);
 }
 
-export async function __uploadFile(_path, file) {
+export async function __uploadFile(_path, file, fieldName = "image") {
     const fd = new FormData();
-    fd.append("file", file);
+    fd.append(fieldName, file);
     
     return __fetch(_path, "POST", fd);
 }

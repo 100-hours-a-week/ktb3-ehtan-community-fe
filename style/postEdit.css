@@ -4,30 +4,23 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 592px;
-}
-
-#post-summary {
-    margin-top: 24px;
-    height: 103px;
-    width: 592px;
-    font-size: 24px;
-
-    padding-left: 25px;
-
-    border-bottom: 1px solid var(--sub-bg);
-}
-
-.profileImage {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* 영역에 맞게 꽉 채움 */
-    display: block;
-    background-color: var(--sub-bg);
+}
+.postedit-wrapper {
+
+    margin-top: 80px;
+    padding: 10px 10px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    border: 1px solid var(--sub-bg)
 }
 
 
 #post-edit {
+    text-align: center;
     margin-top: 25px;
     margin-bottom: 51px;
     font-size: 25px;
@@ -39,14 +32,14 @@
     font-weight: bold;
     padding-bottom: 15px;
 }
-.postedit-page > form {
+.postedit-wrapper > form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
 }
 
-.postedit-page > form > div {
+.postedit-wrapper > form > div {
     width: 100%;
     padding-left: 24px;
     padding-right: 24px;

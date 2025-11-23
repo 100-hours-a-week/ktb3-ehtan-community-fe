@@ -4,11 +4,6 @@ import { isLoggedIn } from "../auth.js";
 import { formatCountForCard } from '../util.js';
 import { findDom } from "../util.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    initSidebarAuthUI();
-    await initPostsPage();
-    
-});
 
 function createFixedMasonry(container, { columnWidth, gutter }) {
     const state = {
@@ -100,37 +95,15 @@ function createFixedMasonry(container, { columnWidth, gutter }) {
 }
 
 
-async function initPostsPage() {
-    myProfileHandler();
-    initPostWriteButton();
-    initSideProfileCard();
+export async function initPostsPage() {
+    // initPostWriteButton();
+    // initSideProfileCard();
     await loadPostHandler();
 }
 
-function myProfileHandler() {
-    const $myProfileImage = document.getElementById('myProfileImage');
-    const url = localStorage.getItem('profile_image_url');
 
-    if ($myProfileImage) {
-        if (url && url.trim() !== "" && url !== "dummy link") {
-            $myProfileImage.src = url;
-        } else {
-            $myProfileImage.src = "/images/profile_placeholder.svg";
-        }
-    }
-}
 
-function initPostWriteButton() {
-    const btn = document.getElementById("post-write-btn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-        if (!isLoggedIn()) {
-            openLoginModal();
-            return;
-        }
-        window.location.href = "/page/postEdit.html";
-    });
-}
+
 function canScroll(rootEl) {
     return rootEl.scrollHeight > rootEl.clientHeight + 50; // 여유 50px
 }
@@ -246,7 +219,7 @@ function normalizeCursor(value) {
 }
 
 function renderPostCard(post) {
-    const imageUrl = (post.image_url && post.image_url.trim()) ? post.image_url : "";
+    const imageUrl = (post.thumbnail_image_url && post.thumbnail_image_url.trim()) ? post.thumbnail_image_url : "";
     const likeCount = formatCountForCard(post.like_count);
     const commentCount = formatCountForCard(post.comment_count);
     const viewCount = formatCountForCard(post.view_count);
@@ -305,133 +278,9 @@ function renderContentSnippet(p) {
     return snippet.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function initSideProfileCard() {
-    const authed = isLoggedIn();
-    const guest = document.querySelector(".side-profile [data-guest]");
-    const welcome = document.querySelector(".side-profile [data-auth-only]");
-    const nickEl = document.querySelector("[data-role='side-nickname']");
-    const thumb = document.querySelector("[data-role='side-profile-image']");
 
-    guest?.classList.toggle("hide", authed);
-    welcome?.classList.toggle("hide", !authed);
 
-    if (authed) {
-        const nick = localStorage.getItem("nickname") || "익명";
-        const img = localStorage.getItem("profile_image_url");
-        if (nickEl) nickEl.textContent = nick;
-        if (thumb) thumb.style.backgroundImage = img ? `url('${img}')` : "url('/images/profile_placeholder.svg')";
-    }
 
-    document.querySelectorAll(".side-card [data-action]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const action = btn.getAttribute("data-action");
-            if (action === "login") return openLoginModal();
-            if (action === "join") return window.location.href = "/page/join.html";
-            if (action === "write") {
-                if (!isLoggedIn()) return openLoginModal();
-                return window.location.href = "/page/postEdit.html";
-            }
-            if (action === "profile") {
-                if (!isLoggedIn()) return openLoginModal();
-                return window.location.href = "/page/profileEdit.html";
-            }
-        });
-    });
-}
 
-function initSidebarAuthUI() {
-    const authed = isLoggedIn();
-    document.querySelectorAll("[data-auth-only]").forEach(el => {
-        el.classList.toggle("hide", !authed);
-    });
 
-    const $loginBtn = document.getElementById("side-login-btn");
-    if ($loginBtn) {
-        $loginBtn.classList.toggle("hide", authed);
-        if (!authed) {
-            $loginBtn.addEventListener("click", openLoginModal);
-        }
-    }
-}
 
-function openLoginModal() {
-    let modal = document.getElementById("login-modal");
-    if (!modal) {
-        modal = buildLoginModal();
-        document.body.appendChild(modal);
-    }
-    modal.classList.remove("hide");
-}
-
-function closeLoginModal() {
-    const modal = document.getElementById("login-modal");
-    if (modal) modal.classList.add("hide");
-}
-
-function buildLoginModal() {
-    const wrap = document.createElement("div");
-    wrap.id = "login-modal";
-    wrap.className = "login-modal hide";
-    wrap.innerHTML = `
-        <div class="login-modal__overlay" role="presentation"></div>
-        <div class="login-modal__dialog" role="dialog" aria-label="로그인">
-            <button class="login-modal__close" aria-label="닫기">&times;</button>
-            <h2>로그인</h2>
-            <form id="login-modal-form">
-            <label>
-                이메일
-                <input name="email" type="email" placeholder="이메일을 입력하세요" required />
-            </label>
-            <label>
-                비밀번호
-                <input name="password" type="password" placeholder="비밀번호를 입력하세요" required />
-            </label>
-            <div class="login-modal__actions">
-                <button type="submit">로그인</button>
-            </div>
-            <div class="login-modal__error" aria-live="polite"></div>
-            </form>
-        </div>
-    `;
-
-    wrap.querySelector(".login-modal__overlay").addEventListener("click", closeLoginModal);
-    wrap.querySelector(".login-modal__close").addEventListener("click", closeLoginModal);
-    wrap.querySelector("#login-modal-form").addEventListener("submit", handleLoginSubmit);
-
-    return wrap;
-}
-
-async function handleLoginSubmit(e) {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value.trim();
-    const password = form.password.value;
-    const $dialog = form.closest(".login-modal__dialog");
-    const $error = $dialog?.querySelector(".login-modal__error");
-    if ($error) $error.textContent = "";
-    if (!email || !password) {
-        if ($error) $error.textContent = "이메일과 비밀번호를 입력해주세요.";
-        return;
-    }
-
-    try {
-        const res = await __postFetch("/users/auth/token", { email, password });
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 404) {
-                if ($error) $error.textContent = "이메일 또는 비밀번호가 올바르지 않습니다.";
-            } else {
-                if ($error) $error.textContent = "잠시 후 다시 시도해주세요.";
-            }
-            return;
-        }
-        const json = await res.json();
-        localStorage.setItem("user_id", json.data.user_id);
-        localStorage.setItem("nickname", json.data.nickname);
-        localStorage.setItem("access_token", json.data.access_token);
-        localStorage.setItem("profile_image_url", json.data.profile_image_url);
-        closeLoginModal();
-        location.reload();
-    } catch {
-        if ($error) $error.textContent = "네트워크 오류가 발생했습니다.";
-    }
-}

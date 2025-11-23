@@ -69,14 +69,17 @@ main {
     font-size: 13px;
     height: 15px;
 }
+.login-valid {
+    background-color: var(--valid-btn-bg) !important;
+}
 .flex {
     display: flex;
     height: 100%;
     width: 100%;
     margin: 0 auto;
     gap: 24px;
-    /* align-items: flex-start; */
-    /* box-sizing: border-box; */
+    align-items: flex-start;
+    box-sizing: border-box;
 }
 /* 
 =======================================================
@@ -136,7 +139,6 @@ main {
     align-items: center;
 
     width: 100%;
-    max-width: 1100px;
     padding: 0 12px;
     gap: 12px;
 }
@@ -212,4 +214,380 @@ main {
 
 .profile-menu button:hover {
     font-weight: 600;
+}
+
+.community-banner {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(120deg, rgba(127,106,238,0.65), rgba(172,160,235,0.6)),
+        url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=300') center/cover no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 40px 48px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.banner__content {
+    max-width: 520px;
+}
+
+.banner__title {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+}
+
+.banner__subtitle {
+    margin: 0;
+    font-size: 16px;
+}
+
+
+/*
+=======================================================
+사이드바
+=======================================================
+*/
+
+.side {
+    /* position: sticky; */
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 260px;
+    min-width: 240px;
+    max-width: 260px;
+    height: 100%;
+    border-right: 1px solid var(--sub-bg);
+    background-color: white;
+
+    gap: 18px;
+    transition: transform 0.6s ease;
+}
+
+.side.collapsed {
+    transform: translateX(-320px);
+}
+.side-collapsed {
+    transform: translateX(-250px);
+}
+
+
+
+.side-profile {
+    padding: 50px 16px 20px 16px;
+    text-align: center;
+}
+.side-card {
+    height: 100%;
+}
+
+.side-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.side-card a,
+.side-card button {
+    text-decoration: none;
+    color: var(--text);
+    border: none;
+    padding: 0;
+    font-size: 15px;
+}
+
+.side-login-btn {
+    margin-top: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: var(--invalid-btn-bg);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.side-login-btn:hover {
+    background: #7F6AEE;
+}
+
+.side-list {
+    color: #555;
+}
+
+
+
+.profile-thumb {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5c6ff, #cde3ff);
+    background-size: cover;
+    background-position: center;
+}
+
+.side-profile__member,
+.side-profile__welcome {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.side-profile__name {
+    font-weight: 700;
+}
+
+.side-profile__hint {
+    flex-shrink: 0;
+    /* width: 200px; */
+    font-size: 13px;
+    color: #666;
+}
+
+.side-profile__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.side-profile__actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    background-color: #fceeff;
+    transition: transform 0.2s ease;
+}
+.side-profile__actions button:hover {
+    transform: translateY(-5px);
+}
+
+.side-profile__guest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.side-profile__guest-title {
+    font-size: 14px;
+    color: #555;
+}
+
+.side-profile__guest-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-login-guest {
+    width: 100%;
+    padding: 12px;
+    height: 40px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    color: #444;
+    cursor: pointer;
+}
+
+.btn-join-guest {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid #d9d9e0;
+    background: #fff;
+    font-weight: 700;
+    color: #444;
+    cursor: pointer;
+}
+
+
+
+/*
+=======================================================
+로그인 모달
+=======================================================
+*/
+.login-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+}
+
+.login-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.login-modal__dialog {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+    width: 600px;
+    min-height: 300px;
+    max-width: 90%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.login-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.login-modal__body {
+    display: flex;
+    gap: 16px;
+    height: 100%;
+}
+
+.login-modal__branding {
+    flex: 0 0 220px;
+    background: linear-gradient(135deg, #f5c6ff, #cde3ff);
+    border-radius: 10px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    color: #222;
+}
+
+.login-modal__logo {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.login-modal__subtitle {
+    font-size: 15px;
+}
+
+.login-modal__right {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 4px;
+}
+
+.login-modal h2 {
+    margin: 0;
+}
+#login-modal-form label {
+    margin-top: 5px;
+}
+
+#login-modal-form,
+#global-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#login-modal-form label,
+#global-login-form label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 6px;
+}
+
+#login-modal-form input,
+#global-login-form input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#login-modal-form a {
+    width: 100%;
+    text-align: center;
+}
+
+.login-modal__actions button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--invalid-btn-bg);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-modal__actions button:hover {
+    background: #7F6AEE;
+}
+
+.login-modal__error {
+    color: #c00;
+    font-size: 13px;
+    min-height: 16px;
+}
+
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 38px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: #666;
+}
+
+.login-modal__link {
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+    text-align: right;
+}
+
+.login-modal__hint {
+    margin-bottom: 20px;
 }

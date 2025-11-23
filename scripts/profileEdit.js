@@ -1,17 +1,9 @@
-import { isLoggedIn } from "./auth.js";
 import { __getFetch, __patchFetch, __deleteFetch } from "./api.js";
 import { __validateInputNickname, msg } from "./validation.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (!isLoggedIn()) {
-        window.location.replace("/page/login.html");
-        return;
-    }
 
-    initProfilePage();
-});
 
-function initProfilePage() {
+export function initProfilePage() {
     const nicknameInput = document.getElementById("inputNickname");
     const hint = document.getElementById("hintNickname");
     const editBtn = document.querySelector(".profile-edit-button");
@@ -48,6 +40,8 @@ function initProfilePage() {
         }
 
         if (res.ok) {
+
+            alert("프로필 수정 완료");
             showToast(toast);
         }
     });

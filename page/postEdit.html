@@ -3,46 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아무 말 대잔치 - 게시글 수정</title>
+    <title>하루 조각</title>
     <link rel="stylesheet" href="../style/common.css">
     <link rel="stylesheet" href="../style/postEdit.css">
-    <script src="../scripts/common.js"></script>
-    <script type="module" src="../scripts/postEdit.js"></script>
+    
+    <script type="module" src="../scripts/app/app-postEdit.js"></script>
+    
+    <!-- 글꼴 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header-wrapper">
-        <div class="header-content">
-            <div class="header-action header-action-left">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <path d="M22 12L14 20L22 28" stroke="#222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <div class="header-left">
+            <button type="button" class="header-action" id="sidebar-toggle">
+                <svg class="icon-select" width="32" height="32" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M4 7h16M4 12h16M4 17h16"
+                            stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-            </div>
-            <div class="header-title">아무 말 대잔치</div>
-            <div class="header-action header-action-right profile-image-wrapper">
-                <img id="myProfileImage" class="profileImage"></img>
+            </button>
+            <div class="header-title"><a href="/index.html">하루 조각</a></div>
+        </div>
+        <div class="header-right hide" data-auth-only>
+            <img class="header-action" src="" id="open-profile-settings"/>
+            <div class="profile-menu hide">
+                <button type="button" data-action="profile-edit">회원정보수정</button>
+                <button type="button" data-action="password-change">비밀번호수정</button>
+                <button type="button" data-action="logout">로그아웃</button>
             </div>
         </div>
     </div>
     <main class="page postedit-page">
-        <div id="post-edit">게시글 작성</div>
-        <form id="post-edit-form">
-            <div class="post-edit-filed">제목*</div>
-            <div class="edit-box">
-                <input id="inputPostEditTitle" placeholder="제목을 입력해주세요. (최대 26글자)"/>
-            </div>
+        <div class="postedit-wrapper"> 
+            <div id="post-edit">게시글 작성</div>
+            <form id="post-edit-form">
+                <div class="post-edit-filed">제목*</div>
+                <div class="edit-box">
+                    <input id="inputPostEditTitle" placeholder="제목을 입력해주세요. (최대 26글자)"/>
+                </div>
 
-            <div class="post-edit-filed">내용*</div>
-            <div class="edit-box">
-                <textarea id="inputPostEditContent" placeholder="내용을 입력해주세요."></textarea>
-            </div>
-            <div id="hintTitle" class="field__hint"></div>
-            <div class="post-edit-filed">이미지</div>
-            <div class="">
-                <input id="inputPostEditImage" type="file" />
-            </div>
-            
-            <button id="inputPostEditSubmit" class="post-edit-submit-btn post-edit-submit-disabled" type="submit" disabled>완료</button>
-        </form>
+                <div class="post-edit-filed">내용*</div>
+                <div class="edit-box">
+                    <textarea id="inputPostEditContent" placeholder="내용을 입력해주세요."></textarea>
+                </div>
+                <div id="hintTitle" class="field__hint"></div>
+                <div class="post-edit-filed">이미지</div>
+                <div class="">
+                    <input id="inputPostEditImage" type="file" accept="image/*" />
+                </div>
+                <div id="hintImage" class="field__hint"></div>
+                
+                <button id="inputPostEditSubmit" class="post-edit-submit-btn post-edit-submit-disabled" type="submit" disabled>완료</button>
+            </form>
+        </div>
     </main>
 </body>
 </html>

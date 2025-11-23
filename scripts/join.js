@@ -5,19 +5,9 @@ import {
     __validateInputNickname
 } from "./validation.js";
 import { __postFetch } from "./api.js";
-import { isLoggedIn } from "./auth.js";
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (isLoggedIn()) {
-        window.location.replace("/index.html");
-    }
-    initJoinPage();
-    joinSubmitHandler();
-});
-
-function initJoinPage() {
+export function initJoinPage() {
     profileImageUploadHandler();
     validateJoinInput();
 }
@@ -96,7 +86,7 @@ function inputValidateHandler($target, $hint, __validateFunc) {
     });
 }
 
-function joinSubmitHandler() {
+export function joinSubmitHandler() {
     
     const $form = document.getElementById('join-form');
     $form.addEventListener('submit', async (e) => {
