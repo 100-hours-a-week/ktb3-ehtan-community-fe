@@ -1,0 +1,95 @@
+
+.postedit-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.postedit-wrapper {
+
+    margin-top: 80px;
+    padding: 10px 10px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    border: 1px solid var(--sub-bg)
+}
+
+
+#post-edit {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 51px;
+    font-size: 25px;
+}
+
+.post-edit-filed {
+    width: 100%;
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 15px;
+}
+.postedit-wrapper > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.postedit-wrapper > form > div {
+    width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.edit-box {
+    padding: 20px 0px;
+    border-top: 1px solid var(--sub-bg);
+    border-bottom: 1px solid var(--sub-bg);
+    margin-bottom: 26px;
+}
+
+.edit-box > input, textarea {
+    height: 25px;
+    width: 100%;
+    font-size: 15px;
+    background-color: inherit;
+    border: none;
+}
+
+#inputPostEditContent {
+    height: 260px;
+    font-size: 15px;
+    resize: none;
+}
+
+#inputPostEditImage {
+    font-size: 10px;
+}
+
+.post-edit-submit-btn {
+    margin-top: 20px;
+    width: 355px;
+    height: 44px;
+    color: #FFFFFF;
+    background-color: var(--sub-bg);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 150ms ease;
+    cursor: not-allowed;
+}
+
+.post-edit-submit-btn.post-edit-submit-enabled {
+    background-color: var(--valid-btn-bg);
+    cursor: pointer;
+}
+
+.post-edit-submit-btn.post-edit-submit-disabled {
+    background-color: var(--sub-bg);
+    cursor: not-allowed;
+}

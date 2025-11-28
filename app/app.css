@@ -1,0 +1,82 @@
+/* @import "tailwindcss"; */
+@import "./styles/index.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+
+:root{
+    --bg: #f9f9f9;
+    --text: #111827;
+
+
+    --invalid-btn-bg: #ACA0EB;
+    --valid-btn-bg: #7F6AEE;
+    --collect-bg: #7F6AEE;
+
+    --sub-bg: #E6E1EC;
+
+    --radius: 5px;
+}
+
+*{ box-sizing: border-box; }
+html, body {
+    margin:0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    color: var(--text);
+    background: var(--bg);
+    font-family: "Jua", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+main {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 103px)
+}
+
+
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-select {
+    color: gray;
+}
+.hidden {
+    visibility: hidden !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.field__hint {
+    color: #FF3333;
+    padding-left: 2px;
+    font-size: 13px;
+    height: 15px;
+}
+.login-valid {
+    background-color: var(--valid-btn-bg) !important;
+}
+.flex {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    gap: 24px;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
