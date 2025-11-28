@@ -44,9 +44,6 @@ export function Header({ onToggleSidebar, sidebarCollapsed }) {
     navigate("/password");
     setMenuOpen(false);
   };
-  const HeaderLeftMemo = memo(HeaderLeft);
-  const HeaderRightMemo = memo(HeaderRight);
-
   return (
     <div className="header-wrapper">
       <div className="header-left">
@@ -62,6 +59,7 @@ export function Header({ onToggleSidebar, sidebarCollapsed }) {
       <HeaderRightMemo
         isAuthenticated={isAuthenticated}
         status={status}
+        nickname={user ? user.nickname : "불러오는 중..."}
         profileImage={profileImage}
         menuOpen={menuOpen}
         onToggleMenu={() => setMenuOpen((prev) => !prev)}
@@ -74,7 +72,7 @@ export function Header({ onToggleSidebar, sidebarCollapsed }) {
   );
 }
 
-function HeaderLeft({ onToggleSidebar, sidebarCollapsed }) {
+const HeaderLeftMemo = memo(function HeaderLeft({ onToggleSidebar, sidebarCollapsed }) {
   return (
       <button
         type="button"
@@ -100,11 +98,12 @@ function HeaderLeft({ onToggleSidebar, sidebarCollapsed }) {
         </svg>
       </button>
   );
-}
+});
 
-const HeaderRight = ({
+const HeaderRightMemo = memo(function HeaderRight({
   isAuthenticated,
   status,
+  nickname,
   profileImage,
   menuOpen,
   onToggleMenu,
@@ -112,7 +111,7 @@ const HeaderRight = ({
   goToProfileEdit,
   goToPasswordChange,
   onLogout,
-}) => {
+}) {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const openLoginModal = () => setLoginModalOpen(true);
   const closeLoginModal = () => setLoginModalOpen(false);
@@ -131,6 +130,8 @@ const HeaderRight = ({
             menuOpen={menuOpen}
             menuRef={menuRef}
             goToProfileEdit={goToProfileEdit}
+            profileImage={profileImage}
+            nickname={nickname}
             goToPasswordChange={goToPasswordChange}
             onLogout={onLogout}
           />
@@ -150,19 +151,31 @@ const HeaderRight = ({
       }
     </div>
   );
-}
+});
 
 
 function ProfileDropdown({
   menuOpen,
   menuRef,
   goToProfileEdit,
+  profileImage,
+  nickname,
   goToPasswordChange,
   onLogout,
 }) {
   return (
-    <div ref={menuRef} className={`profile-menu ${menuOpen ? "" : "hide"}`}>
-      <div className="profile-card"></div>
+    <div
+      ref={menuRef}
+      className={`profile-menu ${menuOpen ? "open" : ""}`}
+      aria-hidden={!menuOpen}
+    >
+      <div className="profile-card">
+        <img
+          className="profile-image"
+          src={profileImage}
+        />
+        <div>{nickname}</div>
+      </div>
       <button type="button" data-action="profile-edit" onClick={goToProfileEdit}>
         회원정보수정
       </button>
